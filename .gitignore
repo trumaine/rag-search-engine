@@ -11,3 +11,5 @@ wheels/
 
 # Project data
 data/
+uv.lock
+cache/

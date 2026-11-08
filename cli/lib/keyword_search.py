@@ -31,7 +31,7 @@ class InvertedIndex:
             doc_description = f"{m['title']} {m['description']}"
             self.docmap[doc_id] = m
             self.__add_document(doc_id, doc_description)
-    
+
     def save(self) -> None:
         os.makedirs(CACHE_DIR, exist_ok=True)
         with open(self.index_path, "wb") as f:
@@ -52,7 +52,7 @@ class InvertedIndex:
     def get_documents(self, term: str) -> list[int]:
         doc_ids = self.index.get(term, set())
         return sorted(doc_ids)
-    
+
     def __add_document(self, doc_id: int, text: str) -> None:
         tokens = tokenize_text(text)
         for token in tokens:
@@ -66,6 +66,11 @@ class InvertedIndex:
         doc_count = len(self.docmap)
         term_doc_count = len(self.index[term])
         return math.log((doc_count + 1) / (term_doc_count + 1))
+
+    def get_tfidf(self, doc_id: int, term: str) -> float:
+        tf = self.get_tf(doc_id, term)
+        idf = self.get_idf(term)
+        return tf * idf
 
 
 def build_command() -> None:
@@ -95,13 +100,13 @@ def search_command(query: str, limit: int = DEFAULT_SEARCH_LIMIT) -> list[Movie]
 
 def preprocess_text(text: str) -> str:
     text = text.lower()
-    text = text.translate(str.maketrans("" ,"", string.punctuation))
+    text = text.translate(str.maketrans("", "", string.punctuation))
     return text
 
 
 def load_stopwords() -> list[str]:
     with open(STOPWORDS_PATH, "r") as f:
-        return[preprocess_text(word) for word in f.read().splitlines()]
+        return [preprocess_text(word) for word in f.read().splitlines()]
 
 
 STOPWORDS = load_stopwords()
@@ -142,3 +147,9 @@ def idf_command(term: str) -> float:
     idx = InvertedIndex()
     idx.load()
     return idx.get_idf(tokenize_single_term(term))
+
+
+def tfidf_command(doc_id: int, term: str) -> float:
+    idx = InvertedIndex()
+    idx.load()
+    return idx.get_tfidf(doc_id, tokenize_single_term(term))

@@ -1,13 +1,13 @@
 import json
 import os
-import string
-from typing import Any, TypedDict
+from typing import TypedDict
 
 
 class Movie(TypedDict):
     id: int
     title: str
     description: str
+
 
 DEFAULT_SEARCH_LIMIT = 5
 

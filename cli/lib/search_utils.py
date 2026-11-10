@@ -17,6 +17,8 @@ STOPWORDS_PATH = os.path.join(PROJECT_ROOT, "data", "stopwords.txt")
 
 CACHE_DIR = os.path.join(PROJECT_ROOT, "cache")
 
+BM25_K1 = 1.5
+
 
 def load_movies() -> list[Movie]:
     with open(DATA_PATH, "r") as f:

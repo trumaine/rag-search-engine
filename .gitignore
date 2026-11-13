@@ -11,6 +11,6 @@ wheels/
 .venv
 
 # Project data
-data/
 uv.lock
+data/
 cache/

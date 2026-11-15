@@ -7,7 +7,6 @@ from sentence_transformers import SentenceTransformer
 
 from .search_utils import MOVIE_EMBEDDINGS_PATH, Movie, load_movies
 
-
 EmbeddingArray = NDArray[Any]
 
 
@@ -72,3 +71,10 @@ def verify_embeddings() -> None:
     print(
         f"Embeddings shape: {embeddings.shape[0]} vectors in {embeddings.shape[1]} dimensions"
     )
+
+def embed_query_text(query: str) -> None:
+    search_instance = SemanticSearch()
+    embedding = search_instance.generate_embedding(query)
+    print(f"Query: {query}")
+    print(f"First 3 dimensions: {embedding[:3]}")
+    print(f"Shape: {embedding.shape}")
